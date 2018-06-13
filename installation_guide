@@ -1,0 +1,10 @@
+sudo apt-get install ros-kinetic-rosserial-arduino
+sudo apt-get install ros-kinetic-joy
+sudo apt-get install ros-kinetic-rosserial
+sudo apt-get install ros-kinetic-angles 
+
+
+
+
+
+
