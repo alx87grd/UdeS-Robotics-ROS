@@ -1,0 +1,48 @@
+Step 0 - Flash the latest OS with Jetpack
+
+
+Note (Alex-Jan2018): I have skipped this step for now
+
+
+Step 1 - Add universe and multiverse repository in Software & Updates
+
+
+Step 2 - Instal ROS
+
+See example here :
+http://www.jetsonhacks.com/2017/03/27/robot-operating-system-ros-nvidia-jetson-tx2/
+
+
+Step 3 - Instal Scipy & matplotlib
+
+Sudo apt-get install python-scipy
+Sudo apt-get install python-matplotlib
+
+
+
+Step 4 - Install AlexRobotics
+
+Git clone 
+
+https://github.com/alx87grd/AlexRobotics
+
+
+Step 5 - Install and build opencv:
+
+
+
+http://www.jetsonhacks.com/2017/04/05/build-opencv-nvidia-jetson-tx2/
+
+------------------------------------------------------------------------------------------------------
+Notes - Alex 1-18-2018:
+
+Version jetsonhacks (3.3.0) validée et succès pour lire la caméra embarquée 
+
+Apt-get install ros-kinetic-cv-bridge
+
+Semble avoir installer une autre version de opencv 3.3.1, et la caméra embarqué n’est plus lisible (example de jetsonhack)..
+
+Mais cv_bridge est maintenant installé..
+------------------------------------------------------------------------------------------------------
+
+
