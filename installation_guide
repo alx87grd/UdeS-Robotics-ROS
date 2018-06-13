@@ -1,7 +1,63 @@
+Step 0
+---------------------------------------------------------------------------------
+Install Ubuntu 16.04 LTS
+
+Useful tools in the software center
+Terminator
+Chromium (to read this document on the same pc!)
+Git
+Spyder
+
+Step 1
+---------------------------------------------------------------------------------
+Installing ROS Kinetic LTS
+
+http://wiki.ros.org/kinetic/Installation/Ubuntu
+
+Run all those cmd
+
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+sudo apt-get update
+sudo apt-get install ros-kinetic-desktop-full
+sudo rosdep init
+rosdep update
+
+Add this line to .bashrc
+
+source /opt/ros/kinetic/setup.sh
+
+Also install
+
+sudo apt-get install python-rosinstall
 sudo apt-get install ros-kinetic-rosserial-arduino
 sudo apt-get install ros-kinetic-joy
 sudo apt-get install ros-kinetic-rosserial
 sudo apt-get install ros-kinetic-angles 
+
+
+Step 2
+Creating a ROS workspace
+
+Run cmds:
+
+$ mkdir -p ~/ros_ws/src
+$ cd ~/ros_ws
+$ catkin_make
+
+Add this to .bashrc
+
+echo “Using Ros Workspace: ~/ros_ws”
+source ~/ros_ws/devel/setup.sh
+
+Test ROS
+
+Run
+
+Roslaunch turtle_tf turtle_tf_demo.launch
+
+
+
 
 
 
