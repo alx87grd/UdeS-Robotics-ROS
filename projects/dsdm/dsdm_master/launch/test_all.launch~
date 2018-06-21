@@ -1,0 +1,25 @@
+<launch>
+        <node pkg="joy" type="joy_node" name="joy" output="screen">
+        </node>
+
+        <node pkg="dsdm_navigation" type="joy_navigation.py" name="nav" output="screen">
+        </node>
+
+        <node pkg="dsdm_planning" type="rrt_planner.py" name="plan" output="screen">
+        </node>
+
+	<include file="$(find dsdm_control)/launch/control.launch"/>
+
+	<group ns="a0">
+		<include file="$(find dsdm_actuator)/launch/actuator.launch"/>
+	</group>
+
+	<group ns="a1">
+		<include file="$(find dsdm_actuator)/launch/actuator.launch"/>
+	</group>
+
+	<group ns="a2">
+		<include file="$(find dsdm_actuator)/launch/actuator.launch"/>
+	</group>
+	
+ </launch>

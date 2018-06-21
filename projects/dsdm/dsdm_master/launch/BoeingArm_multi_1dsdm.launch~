@@ -1,0 +1,26 @@
+<launch>
+
+	<rosparam command="load" file="$(find dsdm_master)/config/1dsdm.yaml"/>
+
+<<<<<<< HEAD
+	<rosparam command="load" file="$(find dsdm_control)/config/1dsdm.yaml"/>
+
+=======
+>>>>>>> full-robot-dev
+        
+	<node pkg="joy" type="joy_node" name="joy" output="screen">
+        </node>
+
+	<node pkg="dsdm_control" type="joystick_3DoF_mutlicontrollers.py" name="Master" output="screen">
+        </node>
+
+	<include file="$(find dsdm_actuator)/launch/actuator_a0.launch"/>
+
+	<include file="$(find dsdm_actuator)/launch/actuator_a1.launch"/>
+
+	<include file="$(find dsdm_actuator)/launch/actuator_a2.launch"/>
+
+	<node pkg="dsdm_sensing" type="observer.py" name="obs" output="screen">
+        </node>
+	
+ </launch>

@@ -1,0 +1,56 @@
+# Parameters for DSDM actuator controller node
+
+# Dynamics
+filter_rc:            0.05       # time constant for the filtered differentiation of position values [sec]
+
+
+# Units
+ticks_per_turns:   2000       # Encoder params
+
+
+# Revolute output
+output_units     :   '[rad]'  #
+output_units_corr:    1       # Value correcting for output units that are not radian
+
+# Linear output
+# Output units = meter + set rout to lead [mm/rev]
+#output_units     :   '[meter]'          #
+#output_units_corr:    0.0001591549      # from rad to meter : 1/ 2 * pi / 1000
+
+# Gear ratios
+r1:                 23.2      # gear ratio motor 1
+r2:                 474       # gear ratio motor 2
+rout:                 1       # output reduction 
+
+# Signs Encoder
+out_sign:   -1 
+m1_sign:    -1
+m2_sign:     1
+
+# Signs position current torque
+m1_torque_sign:  -1
+m2_torque_sign:  -1
+m1_torque_gain:  42467  #5072 #    Nm --> mA (32467)  mA --> int (1/6.4)
+m2_torque_gain:  802467  #5072 # 
+mA2units      :  0.2 
+m1_max_current: 8000 # mA
+m2_max_current: 8000 # mA
+
+# Gains for Flexsea board
+kp:  30
+ki:  10
+kd:   0
+
+# Control mode
+ctl_mode: 3  # 1: PWM 2: Position 3: Current 4: Impedence 5: Custom
+
+# Brake on which board?
+mbrake: 2
+
+
+# DSDM sync controller
+g_sync_kp :    1    # overall gain
+g_sync_ki :    0.1  # integral gain
+g_1       :   -1    # motor 1 component
+g_2       :   20    # motor 2 component
+w_eps     :   10    # allowable velocity before engaging the brake [rad/sec]

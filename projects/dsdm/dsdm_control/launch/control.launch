@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="dsdm_control" type="ctc_controller.py" name="master_controller" output="screen"/>
+	<node pkg="dsdm_control" type="dispatcher" name="disp" output="screen"/>
+ </launch>

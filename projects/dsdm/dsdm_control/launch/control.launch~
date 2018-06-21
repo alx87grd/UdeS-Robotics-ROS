@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="control" type="ctc_controller.py" name="master_controller" output="screen"/>
+	<node pkg="control" type="dispatcher" name="disp" output="screen"/>
+ </launch>

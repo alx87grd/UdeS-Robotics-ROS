@@ -1,0 +1,154 @@
+#!/usr/bin/env python
+import rospy
+import numpy as np
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from dsdm_msgs.msg import dsdm_robot_control_inputs
+
+
+from AlexRobotics.dynamic  import Manipulator    as M
+from AlexRobotics.control  import ComputedTorque as CTC
+
+
+#########################################
+class CTC_controller(object):
+    """
+    navigation
+    """
+    def __init__(self):
+        
+        self.verbose = True
+        
+        # Sub / pub
+        self.sub_traj_sol = rospy.Subscriber("traj", JointTrajectory , self.load_traj ,  queue_size=1      )
+        self.pub_control  = rospy.Publisher("u", dsdm_robot_control_inputs , queue_size=1   )
+        
+        # Timer
+        self.timer    = rospy.Timer( rospy.Duration.from_sec(0.1),    self.callback  )
+        
+        # Assign controller
+        R            = M.TwoLinkManipulator()
+        self.CTC     = CTC.ComputedTorqueController( R )
+        
+        # Load params
+        self.CTC.w0           = 1.0
+        self.CTC.zeta         = 0.7
+        self.CTC.traj_ref_pts = 'closest'
+        
+        self.n_DOF = 2
+        
+        
+        # INIT
+        self.trajectory_loaded = False
+        self.t_zero = rospy.get_rostime()
+        
+        # Fake state feedback
+        x = self.CTC.R.xbar
+        
+        
+        
+    #######################################   
+    def load_traj( self, msg ):
+        """ Load Ref trajectory """
+        
+        # Traj length ?
+        n = len( msg.points )        
+        
+        q   = np.zeros([self.n_DOF,n])
+        dq  = np.zeros([self.n_DOF,n])
+        ddq = np.zeros([self.n_DOF,n])
+        t   = np.zeros(n)
+        
+        # READ THE MESSAGE
+        
+        #For all pts
+        for i in range(n):
+            
+            # Time vector
+            secs    = msg.points[i].time_from_start.secs
+            nsecs   = msg.points[i].time_from_start.nsecs
+            t[i]    = secs + nsecs * 0.001
+            
+            # For all DOF
+            for j in range( self.n_DOF ):
+                q[j,i]    = msg.points[i].positions[j]
+                dq[j,i]   = msg.points[i].velocities[j]
+                ddq[j,i]  = msg.points[i].accelerations[j]
+        
+        ###################
+        
+        # Setup CTC class stuff
+        
+        self.CTC.traj = [ ddq , dq , q , t ]
+        
+        self.CTC.max_time = t.max()
+        
+        # assign new controller
+        self.CTC.ctl = self.CTC.traj_following_ctl
+        
+        # Create interpol functions
+        self.CTC.q   = CTC.interp1d(t,q)
+        self.CTC.dq  = CTC.interp1d(t,dq)
+        self.CTC.ddq = CTC.interp1d(t,ddq)
+        
+        #####################
+        
+        # Record new reference for time
+        
+        self.t_zero = rospy.get_rostime()
+        
+        self.trajectory_loaded = True
+        
+        
+        ##################
+        if self.verbose:
+            rospy.loginfo("Controller: Ref Trajectory Loaded ")
+            
+    #######################################   
+    def pub_u( self, u ):
+        """ pub control inputs """
+        
+        msg = DSDM_robot_control_inputs()
+        
+        msg.m = 2  # number of actuators
+        msg.p = 1  # number of discrete mode options
+        msg.k = 0  # index for mode
+        
+        # Testing
+        msg.k = np.random.randint(0,5)
+        
+        for i in range( msg.m ):
+            msg.F.append( u[i] )
+        
+        self.pub_control.publish( msg )
+        
+        
+            
+    #######################################   
+    def callback( self, event ):
+        """ Timed controller response """
+        
+        # State feedback
+        x = self.x
+        
+        # Get time
+        t_ros = rospy.get_rostime() - self.t_zero
+        t     = t_ros.to_sec()
+        
+        # Compute u
+        u = self.CTC.ctl(  x , t )
+        
+        # Publish u
+        self.pub_u( u )
+        
+        ##################
+        if self.verbose:
+            rospy.loginfo("Controller: Published u = " + str(u) )
+        
+        
+        
+#########################################
+if __name__ == '__main__':
+    
+    rospy.init_node('Master_Controller',anonymous=False)
+    node = CTC_controller()
+    rospy.spin()

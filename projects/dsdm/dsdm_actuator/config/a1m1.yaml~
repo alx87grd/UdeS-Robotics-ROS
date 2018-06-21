@@ -1,0 +1,12 @@
+# Parameters for FlexSEA execute driver
+
+# Board ID list
+# FLEXSEA_EXECUTE_BASE: 40
+# FLEXSEA_EXECUTE_1: 0 + FLEXSEA_EXECUTE_BASE
+# FLEXSEA_EXECUTE_2: 1 + FLEXSEA_EXECUTE_BASE
+# FLEXSEA_EXECUTE_3: 1 + FLEXSEA_EXECUTE_BASE
+# FLEXSEA_EXECUTE_4: 3 + FLEXSEA_EXECUTE_BASE
+
+port_name:     '/dev/ttyACM2'
+execute_ID:    40
+actuator_name: 'execute #1 on usb port 0'

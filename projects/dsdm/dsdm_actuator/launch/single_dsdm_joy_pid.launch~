@@ -1,0 +1,10 @@
+<launch>
+	<node pkg="joy" type="joy_node" name="joy" output="screen">
+        </node>
+
+	<node pkg="dsdm_actuator" type="joy_stick_dsdm_pid.py" name="PID" output="screen">
+        </node>
+
+	<include file="$(find dsdm_actuator)/launch/actuator.launch"/>
+
+ </launch>

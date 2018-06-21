@@ -1,0 +1,27 @@
+# Parameters for ctc controller
+
+# Control mode type
+controller:     'RfixCTC'         #   RminCTC or RfixCTC or RminSLD or RfixSLD or RollCTC or RollSLD
+fixed_mode:      1                #
+
+# Robot type
+n_gears:         2             # number of possible gear selection
+goal:           [0,0]          # target state
+
+# General 
+hysteresis:      true          # true or false hysteresis mode
+min_delay:       0.5           #
+
+# CTC only
+w0:              10.0
+zeta:            0.7
+
+# Sliding only
+lam:             1.0
+nab:             0.0
+D:               1.5
+
+# Roll Only
+horizon:         0.5           #
+sim_dt:          0.1           #
+domain_check:    true

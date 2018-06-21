@@ -1,0 +1,23 @@
+<launch>
+	<group ns="a2">
+
+		<!-- Gen for single actuator, default is rev elbow -->
+		<rosparam command="load" file="$(find dsdm_actuator)/config/a2.yaml"/>
+
+		<node pkg="dsdm_actuator" type="dsdm_ctl.py" name="ctl" output="screen">
+		</node>
+
+
+	 	<group ns="M1">
+			<rosparam command="load" file="$(find flexsea_execute )/config/m1.yaml"/>
+			<node pkg="flexsea_execute" type="flexsea_execute_node" name="execute" output="screen">
+			</node>
+	 	</group>
+
+		<group ns="M2">
+			<rosparam command="load" file="$(find flexsea_execute)/config/m2.yaml"/>
+			<node pkg="flexsea_execute" type="flexsea_execute_node" name="execute" output="screen">
+			</node>
+	 	</group>
+	</group>
+ </launch>

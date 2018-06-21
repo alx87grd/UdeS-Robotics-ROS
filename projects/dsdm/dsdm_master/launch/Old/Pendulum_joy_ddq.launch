@@ -1,0 +1,19 @@
+<launch>
+
+	<rosparam command="load" file="$(find dsdm_master)/config/Pendulum.yaml"/>
+
+        <node pkg="joy" type="joy_node" name="joy" output="screen">
+        </node>
+
+        <node pkg="dsdm_navigation" type="joystick_setpoint_nav.py" name="nav" output="screen">
+        </node>
+
+	<node pkg="dsdm_control" type="ctc_manual_setpoint.py" name="ctl" output="screen">
+        </node>	
+
+	<include file="$(find dsdm_actuator)/launch/actuator_a2_alone.launch"/>
+
+	<node pkg="dsdm_sensing" type="observer.py" name="obs" output="screen">
+        </node>
+	
+ </launch>
