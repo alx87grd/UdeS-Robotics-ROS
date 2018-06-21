@@ -1,0 +1,10 @@
+<launch>
+	<group ns="a1">
+		<rosparam command="load" file="$(find dsdm_actuator)/config/a1.yaml"/>
+
+		<node pkg="dsdm_actuator" type="dsdm_ctl.py" name="ctl" output="screen">
+		</node>
+
+
+	</group>
+ </launch>

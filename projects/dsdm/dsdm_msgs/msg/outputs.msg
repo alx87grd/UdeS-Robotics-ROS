@@ -1,0 +1,14 @@
+# Message for flexsea execute sensors
+Header header
+sensor_msgs/Imu     imu        # ROS IMU msg type (using Accel and Gyro data)
+int8                e          # strain sensor [%]
+float32             analog_0   # analog in 0 [volts]
+float32             analog_1   # analog in 0 [volts]
+int32               current    # current [mA]
+int32               encoder    # position encoder [count]
+float32             vb         # supply [volts]
+float32             vg         # supply [volts]
+float32             temp       # temperature [celsius]
+int8                status_1   # status code
+int8                status_2   # status code
+string              status     # status code string

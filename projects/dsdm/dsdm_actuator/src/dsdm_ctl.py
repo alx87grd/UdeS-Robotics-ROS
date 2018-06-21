@@ -3,8 +3,8 @@ import rospy
 import numpy as np
 from dsdm_msgs.msg import dsdm_actuator_control_inputs
 from dsdm_msgs.msg import dsdm_actuator_sensor_feedback
-from flexsea_execute.msg import inputs
-from flexsea_execute.msg import outputs
+#from flexsea_execute.msg import inputs
+#from flexsea_execute.msg import outputs
 
 #########################################
 class DSDM_CTL(object):
@@ -21,14 +21,14 @@ class DSDM_CTL(object):
         self.verbose = False
         
         # Message outgoing
-        self.pub_cmd_m1     = rospy.Publisher("M1/u", inputs , queue_size=1      )
-        self.pub_cmd_m2     = rospy.Publisher("M2/u", inputs , queue_size=1      )
+        #self.pub_cmd_m1     = rospy.Publisher("M1/u", inputs , queue_size=1      )
+        #self.pub_cmd_m2     = rospy.Publisher("M2/u", inputs , queue_size=1      )
         self.pub_y          = rospy.Publisher("y", dsdm_actuator_sensor_feedback , queue_size=1      )
         
         # Messages Inputs        
         self.sub_u          = rospy.Subscriber("u", dsdm_actuator_control_inputs , self.setpoint_callback , queue_size=1 )
-        self.sub_y_m1       = rospy.Subscriber("M1/y", outputs , self.feedback_callback_m1 , queue_size=1 )
-        self.sub_y_m2       = rospy.Subscriber("M2/y", outputs , self.feedback_callback_m2 , queue_size=1 )
+        #self.sub_y_m1       = rospy.Subscriber("M1/y", outputs , self.feedback_callback_m1 , queue_size=1 )
+        #self.sub_y_m2       = rospy.Subscriber("M2/y", outputs , self.feedback_callback_m2 , queue_size=1 )
         
         # Timers
         self.param_timer    = rospy.Timer( rospy.Duration.from_sec(1.0),    self.load_params  )
@@ -374,36 +374,8 @@ class DSDM_CTL(object):
     ###########################################
     def pub_cmd( self ):
         """ """
+	pass
         
-        msg_m1 = inputs()
-        msg_m2 = inputs()
-        
-        msg_m1.header.stamp    = rospy.Time.now()        
-        msg_m1.ctrl_mode       = self.ctrl_modes[0]
-        msg_m1.ctrl_gains      = self.ctrl_gains 
-        msg_m1.ctrl_setpoint   = int( self.setpoints_comm[0] )
-        msg_m1.trap_mode       = self.trap_mode
-        msg_m1.trap_values     = self.trap_values
-        
-        msg_m2.header.stamp    = rospy.Time.now() 
-        msg_m2.ctrl_mode       = self.ctrl_modes[1]
-        msg_m2.ctrl_gains      = self.ctrl_gains 
-        msg_m2.ctrl_setpoint   = int( self.setpoints_comm[1] )
-        msg_m2.trap_mode       = self.trap_mode
-        msg_m2.trap_values     = self.trap_values
-        
-        # Brake is wired to board ID#2
-        if self.mbrake == 2:
-            msg_m1.brake_pwm       = 0
-            msg_m2.brake_pwm       = self.brake_state
-        
-        # Brake is wired to board ID#1
-        elif self.mbrake == 1:
-            msg_m1.brake_pwm       = self.brake_state
-            msg_m2.brake_pwm       = 0
-        
-        self.pub_cmd_m1.publish( msg_m1 )
-        self.pub_cmd_m2.publish( msg_m2 )
         
         
     ###########################################
