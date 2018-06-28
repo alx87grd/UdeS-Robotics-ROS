@@ -29,7 +29,8 @@ Servo electronicSpeedController ;  // The ESC on the TRAXXAS works like a Servo
 // ROS
 ros::NodeHandle  nodeHandle;
 //std_msgs::Int32 str_msg;
-//ros::Publisher chatter("chatter", &str_msg);
+std_msgs::String str_msg;
+ros::Publisher chatter("arduino_debug_feedback", &str_msg);
 
 //////////////////////////////////////////////////////////////////
 
@@ -90,11 +91,12 @@ void cmdCallback ( const geometry_msgs::Twist&  twistMsg )
   // LED
   digitalWrite(led, HIGH-digitalRead(led));  //toggle led  
   
-  // The following could be useful for debugging
-  // str_msg.data= steeringAngle ;
-  // chatter.publish(&str_msg);
-  // str_msg.data= escCommand ;
-  // chatter.publish(&str_msg); 
+  // Debug feedback
+  char msg[50];
+  sprintf(msg, "Servo PWM:%d/180  ESC PWM:%d/180", ser_pwm, esc_pwm);
+  str_msg.data = msg;
+  chatter.publish( &str_msg );
+  
 }
 
 // ROS suscriber
@@ -119,7 +121,7 @@ void setup(){
   // Subscribe to the steering and throttle messages
   nodeHandle.subscribe(cmdSubscriber) ;
   // This can be useful for debugging purposes
-  //nodeHandle.advertise(chatter);
+  nodeHandle.advertise(chatter);
   
   
   // Initialize Steering and ESC cmd to neutral
