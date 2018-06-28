@@ -129,6 +129,8 @@ void setup(){
   // Initialize Steering and ESC cmd to neutral
   steeringServo.write(pwm_zer_ser) ;
   electronicSpeedController.write(pwm_zer_esc) ;
+  
+  //
   delay(1000) ;
 
 }
