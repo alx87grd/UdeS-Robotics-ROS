@@ -53,7 +53,7 @@ const int pwm_max_esc = 150 ;
 
 // Conversion
 const double  rad2pwm = 60;
-const double volt2pwm = 50;
+const double volt2pwm = 60;
 
 ///////////////////////////////////////////////////////////////////
 
@@ -85,7 +85,7 @@ void cmdCallback ( const geometry_msgs::Twist&  twistMsg )
   steeringServo.write(ser_pwm) ;
   
   // ESC 
-  double esc_cmd = twistMsg.angular.x; //volt
+  double esc_cmd = twistMsg.linear.x; //volt
   int esc_pwm    = cmd2pwm( esc_cmd, volt2pwm, pwm_min_esc, pwm_zer_esc, pwm_max_esc) ;
     
   electronicSpeedController.write(esc_pwm) ;

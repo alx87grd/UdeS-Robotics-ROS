@@ -35,25 +35,25 @@ class teleop(object):
 
             # For logitech joystick
             #mapping button --> cmd
-            cmd_msg.linear.x = 0.5 + joy_msg.axes[4] 
+            cmd_msg.linear.x = joy_msg.axes[4] * -1
             #cmd_msg.linear.y = 0
             #cmd_msg.linear.z = 0            
             
             #cmd_msg.angular.x = 0
             #cmd_msg.angular.y = 0
-            cmd_msg.angular.z = 0.5 + joy_msg.axes[3]
+            cmd_msg.angular.z = joy_msg.axes[3] * -1
             
         else:
             
             enable = False
             
-            cmd_msg.linear.x = 0.5 
+            cmd_msg.linear.x = 0.0 
             #cmd_msg.linear.y = 0
             #cmd_msg.linear.z = 0            
             
             #cmd_msg.angular.x = 0
             #cmd_msg.angular.y = 0
-            cmd_msg.angular.z = 0.5 
+            cmd_msg.angular.z = 0.0 
                    
         
         # Publish cmd msg
