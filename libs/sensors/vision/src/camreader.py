@@ -32,14 +32,15 @@ class camreader(object):
         self.bridge = CvBridge()
         
         # Memory
-        self.camera_IMG  = None
-        self.camera_msg  = None
+        self.camera_IMG     = None
+        self.camera_msg    = None
+        self.processed_img =None
         
         # First run
         self.load_params( None )
         
         # Open Camera
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         
         
         #######################
