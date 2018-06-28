@@ -60,7 +60,9 @@ const double volt2pwm = 50;
 // Convertion function : Command --> PWM
 double cmd2pwm (double cmd, double slope, int pmw_min, int pwm_zer, int pwm_max) {
   // Scale and offset
-  int pwm = (int) cmd * slope + pwm_zer + 0.5;
+  double pwm_d = cmd * slope + (double) pwm_zer;
+  // Rounding and conversion
+  int pwm = (int) ( pwm_d + 0.5 );
   // Saturations
   if (pwm < pmw_min) { 
     pwm = pmw_min;
