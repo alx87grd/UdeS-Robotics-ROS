@@ -1,0 +1,14 @@
+# Define ROI and resampling
+decimation_x:   1      # Number of pixels to decimate to one horizontally. Range: 1 to 16 
+decimation_y:   1      # Number of pixels to decimate to one vertically. Range: 1 to 16 
+x_offset:       0      # X offset of the region of interest. Range: 0 to 2447 
+y_offset:       0      # Y offset of the region of interest. Range: 0 to 2049 
+width:          0      # Width of the region of interest. Range: 0 to 2448
+height:         0      # Height of the region of interest. Range: 0 to 2050
+interpolation:  0      #
+
+#NN (0): Nearest-neighbor sampling
+#Linear (1): Bilinear interpolation
+#Cubic (2): Bicubic interpolation over 4x4 neighborhood
+#Area (3): Resampling using pixel area relation
+#Lanczos4 (4): Lanczos interpolation over 8x8 neighborhood 

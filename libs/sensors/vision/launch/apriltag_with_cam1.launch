@@ -1,0 +1,6 @@
+<launch>
+  <group ns="vision">
+  <include file="$(find vision)/launch/apriltag.launch"/>
+  <include file="$(find vision)/launch/cam1.launch"/>
+  </group>
+</launch>
