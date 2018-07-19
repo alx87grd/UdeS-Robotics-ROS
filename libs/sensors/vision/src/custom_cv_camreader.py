@@ -40,7 +40,7 @@ class camreader(object):
         self.load_params( None )
         
         # Open Camera
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1)
         
         
         #######################
