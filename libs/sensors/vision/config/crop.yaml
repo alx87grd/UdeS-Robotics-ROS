@@ -4,7 +4,7 @@ decimation_y:   1      # Number of pixels to decimate to one vertically. Range: 
 x_offset:       0      # X offset of the region of interest. Range: 0 to 2447 
 y_offset:       0      # Y offset of the region of interest. Range: 0 to 2049 
 width:          0      # Width of the region of interest. Range: 0 to 2448
-height:         0      # Height of the region of interest. Range: 0 to 2050
+height:         300      # Height of the region of interest. Range: 0 to 2050
 interpolation:  0      #
 
 #NN (0): Nearest-neighbor sampling

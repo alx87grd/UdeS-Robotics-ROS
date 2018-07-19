@@ -1,19 +1,20 @@
 <launch>  
+
+  <arg name="camera_name" default="cam1" />
+
   <node pkg="nodelet" type="nodelet"
       args="standalone image_proc/crop_decimate"
       name="roi_cropping">
-  <!--<param name="x_offset" type="int" value="1" />-->
-  <!--<param name="y_offset" type="int" value="1" />-->
-  <!--<param name="width" type="int" value="600" />-->
-  <!--<param name="height" type="int" value="200" />-->
+
   <rosparam file="$(find vision)/config/crop.yaml" command="load" />
 
   <!-- remap input topics -->
-  <remap from="camera/image_raw" to="image_mono"/>
-  <remap from="camera/image_info" to="camera_info"/>
+  <remap from="camera/image_raw" to="/vision/$(arg camera_name)/image_mono"/>
+  <remap from="camera/image_info" to="/vision/$(arg camera_name)/camera_info"/>
 
   <!-- remap output topics -->
   <remap from="camera_out/image_raw" to="image_mono_cropped"/>
-  <remap from="camera_out/image_info" to="camera_info_cropped"/>
+  <remap from="camera_info" to="camera_info_cropped"/>
+
   </node>
 </launch>

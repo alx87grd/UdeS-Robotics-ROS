@@ -1,16 +1,11 @@
 <launch>
-
-  <node pkg="cv_camera" type="cv_camera_node" name="cv_camera" >
+  
+  <arg name="camera_name" default="cam1" />
+  
+  <node pkg="cv_camera" type="cv_camera_node" name="$(arg camera_name)" >
   <param name="device_id" value="1" />
   </node>
 
-  <group ns="cv_camera">
-
-  <node pkg="image_proc" type="image_proc" name="image_proc" >
-  </node>
-
-  <include file="$(find vision)/launch/crop.launch"/>
-
-  </group>
+  <node pkg="image_proc" type="image_proc" name="image_proc" ns="$(arg camera_name)">   </node>
 
 </launch>
