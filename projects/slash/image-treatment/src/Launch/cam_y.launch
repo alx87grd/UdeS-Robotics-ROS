@@ -1,0 +1,4 @@
+<launch>
+  <node name="CAMPUB_NODE" pkg="image_setup" type="campub_node.py"/>
+  <node name="LANE_DETEC_Y" pkg="image_setup" type="ttt6.py"/>
+</launch>
