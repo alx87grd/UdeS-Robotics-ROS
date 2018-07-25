@@ -2,7 +2,7 @@
 
 import math
 import sys
-from image_setup.msg import CamState
+from image_treatment.msg import CamState
 from std_msgs.msg import Int32MultiArray
 import rospy
 from sensor_msgs.msg import Image

@@ -1,0 +1,20 @@
+<launch>
+
+  <arg name="razor_config_file" default="$(find razor_imu_9dof)/config/razor_imu.yaml"/>
+  <node pkg="razor_imu_9dof" type="imu_node.py" name="IMU_reader" output="screen">
+    <rosparam file="$(arg razor_config_file)" command="load"/>
+  </node>
+
+  <node pkg="razor_imu_9dof" type="IMU_node.py" name="IMU_treatments">
+  </node>
+
+  <node pkg="vision" type="camreader.py" name="CAM_reader">
+  </node>
+
+  <node pkg="image_treatment" type="lane_detec.py" name="CAM_treatments">
+  </node>
+
+  <node pkg="image_treatment" type="observer.py" name="OBSERVER">
+  </node>
+
+</launch>

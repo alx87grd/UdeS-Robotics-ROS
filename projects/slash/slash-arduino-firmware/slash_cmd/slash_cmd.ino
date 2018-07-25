@@ -49,7 +49,7 @@ const int pwm_zer_ser = 90  ;
 const int pwm_max_ser = 150 ;
 const int pwm_min_esc = 0   ;
 const int pwm_zer_esc = 90  ;
-const int pwm_max_esc = 150 ;
+const int pwm_max_esc = 180 ;
 
 // Conversion
 const double  rad2pwm = 60;
