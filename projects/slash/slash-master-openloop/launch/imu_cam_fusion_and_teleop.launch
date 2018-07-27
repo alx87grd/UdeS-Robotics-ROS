@@ -25,7 +25,7 @@
   <node pkg="image_treatment" type="lane_detec.py" name="CAM_treatments">
   </node>
 
-  <node pkg="image_treatment" type="observer.py" name="OBSERVER">
+  <node pkg="image_treatment" type="observer3.py" name="OBSERVER">
   </node>
 
 </launch>
