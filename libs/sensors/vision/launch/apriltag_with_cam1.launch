@@ -1,0 +1,10 @@
+<launch>
+  <arg name="camera_name" default="cam1" />
+  <group ns="vision">
+	  <include file="$(find vision)/launch/cam1.launch" pass_all_args="true"/>
+	  <group ns="$(arg camera_name)_tagsdetection">  
+		  <include file="$(find vision)/launch/crop.launch" pass_all_args="true"/>
+		  <include file="$(find vision)/launch/apriltag.launch"/>
+	  </group>
+  </group>
+</launch>
