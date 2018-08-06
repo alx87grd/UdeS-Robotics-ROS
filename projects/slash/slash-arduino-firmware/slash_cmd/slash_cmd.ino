@@ -53,7 +53,7 @@ const int pwm_max_esc = 180 ;
 
 // Conversion
 const double  rad2pwm = 60;
-const double volt2pwm = 60;
+const double volt2pwm = 30;
 
 ///////////////////////////////////////////////////////////////////
 

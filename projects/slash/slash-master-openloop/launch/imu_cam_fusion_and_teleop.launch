@@ -22,10 +22,10 @@
   <node pkg="vision" type="custom_cv_camreader.py" name="CAM_reader">
   </node>
 
-  <node pkg="image_treatment" type="lane_detec.py" name="CAM_treatments">
+  <node pkg="image_treatment" type="lane_detec.py" name="CAM_treatments" output="screen">
   </node>
 
-  <node pkg="image_treatment" type="observer3.py" name="OBSERVER">
+  <node pkg="image_treatment" type="observer3.py" name="OBSERVER" output="screen">
   </node>
 
 </launch>

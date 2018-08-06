@@ -56,6 +56,7 @@ find_package(OpenCV REQUIRED)
    Num.msg
    CamState.msg
    ImuStates.msg
+   StatesHat.msg
  )
 
 ## Generate services in the 'srv' folder

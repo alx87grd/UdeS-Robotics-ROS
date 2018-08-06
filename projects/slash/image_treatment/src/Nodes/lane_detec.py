@@ -11,7 +11,7 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from collections import deque
 
-QUEUE_LENGTH=10
+QUEUE_LENGTH=1
 
 class LaneDetector:
 
@@ -33,10 +33,10 @@ class LaneDetector:
   
   def callback(self,data):
     try:
-      width = 0.07
+      width = 0.4
       image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-      #white_yellow = self.select_white_yellow(image)
-      smooth_gray  = self.apply_smoothing(image)
+      green = self.select_white_yellow(image)
+      smooth_gray  = self.apply_smoothing(green)
       edges        = self.detect_edges(smooth_gray)
       regions      = self.select_region(edges)
       regions_ori  = self.select_region(image)
@@ -72,16 +72,20 @@ class LaneDetector:
   def select_white_yellow(self, image):
     
     converted = cv2.cvtColor(image, cv2.COLOR_BGR2HLS)
+    # green color mask
+    lower = np.uint8([  50, 150, 150])
+    upper = np.uint8([150, 255, 255])
+    green_mask = cv2.inRange(converted, lower, upper)
     # white color mask
     lower = np.uint8([  0, 235,   0])
     upper = np.uint8([255, 255, 255])
     white_mask = cv2.inRange(converted, lower, upper)
     # yellow color mask
-    lower = np.uint8([ 10,   0, 100])
-    upper = np.uint8([ 40, 255, 255])
-    yellow_mask = cv2.inRange(converted, lower, upper)
+    #lower = np.uint8([ 10,   0, 100])
+    #upper = np.uint8([ 40, 255, 255])
+    #yellow_mask = cv2.inRange(converted, lower, upper)
     # combine the mask
-    mask = cv2.bitwise_or(white_mask, yellow_mask)
+    mask = cv2.bitwise_or(white_mask, green_mask)
     return cv2.bitwise_and(image, image, mask = mask)
 
 
@@ -258,15 +262,22 @@ class LaneDetector:
     
     else:
     
-     lslope = (float(lines[0][1][1])-float(lines[0][0][1]))/(float(lines[0][1][0])-float(lines[0][0][0]))
-     rslope = (float(lines[1][1][1])-float(lines[1][0][1]))/(float(lines[1][1][0])-float(lines[1][0][0]))
-     lintercept = float(lines[0][1][1]) - lslope*float(lines[0][1][0])
-     rintercept = float(lines[1][1][1]) - rslope*float(lines[1][1][0])
-     x_inter = (rintercept-lintercept)/(lslope-rslope)
-     y_inter = lslope*x_inter+lintercept
-     dist_l = x_inter-lines[0][0][0]
-     dist_r = lines[1][0][0]-x_inter
-     state_y = ((width*dist_l)/(dist_l+dist_r))-width/2
+     #lslope = (float(lines[0][1][1])-float(lines[0][0][1]))/(float(lines[0][1][0])-float(lines[0][0][0]))
+     #rslope = (float(lines[1][1][1])-float(lines[1][0][1]))/(float(lines[1][1][0])-float(lines[1][0][0]))
+     #lintercept = float(lines[0][1][1]) - lslope*float(lines[0][1][0])
+     #rintercept = float(lines[1][1][1]) - rslope*float(lines[1][1][0])
+     #x_inter = (rintercept-lintercept)/(lslope-rslope)
+     #y_inter = lslope*x_inter+lintercept
+     #dist_l = x_inter-lines[0][0][0]
+     #dist_r = lines[1][0][0]-x_inter
+     #state_y = ((width*dist_l)/(dist_l+dist_r))-width/2
+
+     #TEST JUSTE AVEC POINTS
+     distl = 320-float(lines[0][0][0])
+     width_pix = float(lines[1][0][0])-float(lines[0][0][0])
+     state_y = -(width/2-distl/width_pix*width)
+     
+    
   
      return state_y
 

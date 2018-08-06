@@ -4,6 +4,7 @@ import math
 import time
 from image_treatment.msg import CamState
 from image_treatment.msg import ImuStates
+from image_treatment.msg import StatesHat
 from geometry_msgs.msg import Twist
 import matplotlib.pyplot as plt
 
@@ -23,52 +24,42 @@ class Observer:
     self.imu_sub = rospy.Subscriber("imu_msg",ImuStates,self.callback2)
 
     
-    self.test_pub = rospy.Publisher("test_gain", ImuStates, queue_size=1)
+    self.states_pub = rospy.Publisher("x_hat", StatesHat, queue_size=1)
 
-    # self.t_last = t
+    self.tlast = rospy.get_rostime()
     self.tgain = -10
-    self.dgain = 15
-    self.tlast = 0
+    self.dgain = 15*3.1416/180
     self.x = np.array([[0],[0],[0]])
+    self.torque = 0
+    self.delta = 0
 
   ##########################################################
 
   
   def callback1(self,cam):
-    try:
       self.cam_y     = cam.state_y
-      print(self.cam_y)
-    except KeyboardInterrupt:
-      print("Shut down")
+
       
   ##########################################################
 
   
   def callback3(self, cmd):
-    try:
       torque_cmd = cmd.linear.x
       self.torque     = self.tgain*torque_cmd # N/m
       delta_cmd  = cmd.angular.z
       self.delta      = self.dgain*delta_cmd  # degree
-
-      
-    except KeyboardInterrupt:
-      print("Shut down")
 
 
   ##########################################################
 
   
   def callback2(self,imu):
-    try:
       self.imu_accx     = imu.state_accx
       self.imu_accy     = imu.state_accy
       self.imu_theta = imu.state_theta
-      self.t = int(str(imu.header.stamp))
+      self.t = rospy.get_rostime()
       self.obs(self.cam_y,self.imu_accx,self.imu_accy,self.imu_theta,self.torque,self.delta, self.t)
      
-    except KeyboardInterrupt:
-      print("Shut down")
 
   #######################################################
 
@@ -79,7 +70,7 @@ class Observer:
      c1 = 1
      c2 = 1
      v = 1
-     dt = t-self.tlast
+     dt = (t-self.tlast).to_sec()
  
   #######################################################
   #---------------------State-Space---------------------#
@@ -89,7 +80,7 @@ class Observer:
      B = np.array([[c1,0.0],[0.0,0.0],[0.0,v/b]])
      C = np.array([[0.0,1.0,0.0],[-c2,0.0,0.0],[0.0,0.0,0.0],[0.0,0.0,1.0]])
      D = np.array([[0.0,0.0],[c1,0.0],[0.0,-v**2],[0.0,0.0]])
-     L = np.array([[0.1, 0.001, 1, 1],[1,1,1,1],[1,1,1,1]])
+     L = np.array([[0, 0, 0, 0],[1,0,0,0],[0,0,0,0]])
 
   #######################################################
   #-----------------------Inputs------------------------#
@@ -106,21 +97,26 @@ class Observer:
   #######################################################
   #----------------------Observer-----------------------#
   #######################################################
-
+     
+     
      x_hat = np.dot(B,u)*dt + np.dot(A,self.x)*dt + self.x + dt*(np.dot(L,y) - np.dot(L,np.dot(D,u)) - np.dot(L,np.dot(C,self.x)))
      self.x = x_hat 
-     self.t_last = t
+     self.tlast = t
+
+  #######################################################
+  #----------------------Publisher----------------------#
+  #######################################################
+
+     msg = StatesHat()
+     msg.header.stamp = rospy.Time.now()
+     msg.state_Vx = x_hat[0]
+     msg.state_y= x_hat[1]
+     msg.state_theta = x_hat[2]
+     self.states_pub.publish(msg)
 
   ##########################################################   
 
-def main(args):
-  ic = Observer()
-  rospy.init_node('OBSERVER', anonymous=True)
-  try:
+if __name__ == '__main__': 
+    rospy.init_node('OBSERVER',anonymous=False)
+    node = Observer()
     rospy.spin()
-  except KeyboardInterrupt:
-    print("Shutting down")
-
-
-if __name__ == '__main__':
-    main(sys.argv)
